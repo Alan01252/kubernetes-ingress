@@ -22,6 +22,7 @@ class RBACAuthorization:
         role (str): cluster role name
         binding (str): cluster role binding name
     """
+
     def __init__(self, role: str, binding: str):
         self.role = role
         self.binding = binding
@@ -207,11 +208,11 @@ def wait_until_all_pods_are_ready(v1: CoreV1Api, namespace) -> None:
     """
     print("Start waiting for all pods in a namespace to be ContainersReady")
     counter = 0
-    while not are_all_pods_in_ready_state(v1, namespace) and counter < 20:
+    while not are_all_pods_in_ready_state(v1, namespace) and counter < 100:
         print("There are pods that are not ContainersReady. Wait for 4 sec...")
         time.sleep(4)
         counter = counter + 1
-    if counter >= 20:
+    if counter >= 100:
         pytest.fail("After several seconds the pods aren't ContainersReady. Exiting...")
     print("All pods are ContainersReady")
 
@@ -976,6 +977,7 @@ def create_ingress_with_ap_annotations(
         doc["metadata"]["annotations"]["appprotect.f5.com/app-protect-security-log"] = logconf
         doc["metadata"]["annotations"]["appprotect.f5.com/app-protect-security-log-destination"] = f"syslog:server={syslog_ep}"
         create_ingress(kube_apis.extensions_v1_beta1, namespace, doc)
+
 
 def replace_ingress_with_ap_annotations(
     kube_apis, yaml_manifest, name, namespace, policy_name, ap_pol_st, ap_log_st, syslog_ep
