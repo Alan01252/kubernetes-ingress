@@ -208,11 +208,11 @@ def wait_until_all_pods_are_ready(v1: CoreV1Api, namespace) -> None:
     """
     print("Start waiting for all pods in a namespace to be ContainersReady")
     counter = 0
-    while not are_all_pods_in_ready_state(v1, namespace) and counter < 100:
+    while not are_all_pods_in_ready_state(v1, namespace) and counter < 20:
         print("There are pods that are not ContainersReady. Wait for 4 sec...")
         time.sleep(4)
         counter = counter + 1
-    if counter >= 100:
+    if counter >= 20:
         pytest.fail("After several seconds the pods aren't ContainersReady. Exiting...")
     print("All pods are ContainersReady")
 
